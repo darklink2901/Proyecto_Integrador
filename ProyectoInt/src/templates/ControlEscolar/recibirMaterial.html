@@ -16,7 +16,6 @@
 
     <!-- Custom styles for this template-->
     <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
-    <link rel="icon" type="image/png" href="{% static 'img/logo.png' %}" >
   </head>
 
     <body id="page-top">
@@ -92,6 +91,7 @@
                             <h6 class="collapse-header">Opciones:</h6>
                             <a class="collapse-item" href="{% url 'materialDisponible' %}">Disponible</a>
                             <a class="collapse-item" href="{% url 'agregarMaterial' %}">Agregar material</a>
+                            <!-- <a class="collapse-item" href="register.html">Prestamos</a> -->
                         </div>
                     </div>
                 </li>
@@ -130,20 +130,6 @@
                             <i class="fa fa-bars"></i>
                         </button>
 
-                        <!-- Topbar Search -->
-                        <form
-                            class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                            <div class="input-group">
-                                <input type="text" class="form-control bg-light border-0 small" placeholder="Buscar"
-                                    aria-label="Search" aria-describedby="basic-addon2">
-                                <div class="input-group-append">
-                                    <button class="btn btn-primary" type="button">
-                                        <i class="fas fa-search fa-sm"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-
                         <!-- Topbar Navbar -->
                         <ul class="navbar-nav ml-auto">
 
@@ -168,18 +154,6 @@
                                 <!-- Dropdown - User Information -->
                                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                     aria-labelledby="userDropdown">
-                                    <a class="dropdown-item" href="#">
-                                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Profile
-                                    </a>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Settings
-                                    </a>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Activity Log
-                                    </a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -195,128 +169,111 @@
 
                     <!-- Begin Page Content -->
                     <div class="container-fluid">
-                      {% if messages %}
-                        {% for message in messages %}
-                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                          <strong>{{message}}</strong>
-                          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        {% endfor %}
-                      {% endif %}
+                              {% if messages %}
+                                {% for message in messages %}
+                                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                  <strong>{{message}}</strong>
+                                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                {% endfor %}
+                              {% endif %}
                         <!-- Page Heading -->
-                        <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                            <h1 class="h3 mb-0 text-gray-800">Prestamos</h1>
-                        </div>
+                          <h1 class="h3 mb-2 text-gray-800">Recibir material del {{departamento}}.</h1>
+                          <p class="mb-4">Devoler material del {{departamento}}.</p>
 
                         <!-- Content Row -->
                         <div class="row">
-
-                            <!-- Earnings (Monthly) Card Example -->
-                            <div class="col-xl-3 col-md-6 mb-4">
-                                <div class="card border-left-primary shadow h-100 py-2">
-                                    <div class="card-body">
-                                        <div class="row no-gutters align-items-center">
-                                            <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                    Prestamos </div>
-                                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{adeudosTotales}}</div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <i class="fas fa-calendar fa-2x text-gray-300"></i>
-                                            </div>
-                                        </div>
-                                    </div>
+                          <div class="container">
+                            <!-- Formulario de prestamos -->
+                            <form method="POST"> {% csrf_token %}
+                              <div class="form-group">
+                                <label for="exampleFormControlInput1">Numero de control</label>
+                                <input name="num" type="text" class="form-control" id="exampleFormControlInput1" placeholder="Numero de control de alumno">
+                              </div>
+                              <div class="form-group">
+                                <div class="form-group">
+                                  <label for="exampleFormControlInput1">Numero de adeudo</label>
+                                  <input name="numAd" type="text" class="form-control" id="exampleFormControlInput1" placeholder="Introduzca el numero del adeudo">
                                 </div>
-                            </div>
+                                <div class="form-group">
+                                 <label for="exampleFormControlSelect2">Material</label>
+                                 <select name="mat" multiple class="form-control" id="exampleFormControlSelect2">
+                                   {% for material in materiales %}
+                                   <option value="{{material.idMaterial}}">{{material.nombre}}</option>
+                                   {% endfor %}
+                                 </select>
+                               </div>
+                                <div class="form-group">
+                                <label for="exampleFormControlSelect1">Cantidad devuelta</label>
+                                <select name="can" class="form-control" id="exampleFormControlSelect1">
+                                  <option value="1">1</option>
+                                  <option value="2">2</option>
+                                  <option value="3">3</option>
+                                  <option value="4">4</option>
+                                  <option value="5">5</option>
+                                  <option value="6">6</option>
+                                  <option value="7">7</option>
+                                  <option value="8">8</option>
+                                </select>
+                              </div>
+                              <!-- <div class="form-group">
+                                <label for="exampleFormControlTextarea1">Example textarea</label>
+                                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                              </div> -->
+                              <button type="submit" class="btn btn-primary">Realizar devolución</button>
+                          </form>
+                          </div>
 
 
 
-                            <!-- Earnings (Monthly) Card Example -->
-                            <div class="col-xl-3 col-md-6 mb-4">
-                                <div class="card border-left-info shadow h-100 py-2">
-                                    <div class="card-body">
-                                        <div class="row no-gutters align-items-center">
-                                            <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Materiales (Tipos)
-                                                </div>
-                                                <div class="row no-gutters align-items-center">
-                                                    <div class="col-auto">
-                                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{materialDisponible}}</div>
-                                                    </div>
-                                                    <div class="col">
-                                                        <div class="progress progress-sm mr-2">
-                                                            <div class="progress-bar bg-info" role="progressbar"
-                                                                style="width: 50%" aria-valuenow="50" aria-valuemin="0"
-                                                                aria-valuemax="100"></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-auto">
-                                                <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <!-- Pending Requests Card Example -->
-                            
-                        </div>
 
                         <!-- Content Row -->
 
                         <div class="row">
-
-
-
-
-
-
-
 
                 <!-- Footer -->
                 <footer class="sticky-footer bg-white">
                     <div class="container my-auto">
                         <div class="copyright text-center my-auto">
-                            <span>Copyright &copy; SILAB 2020</span>
-                        </div>
-                    </div>
-                </footer>
-                <!-- End of Footer -->
+                          <span>Copyright &copy; SILAB 2020</span>
+                      </div>
+                  </div>
+              </footer>
+              <!-- End of Footer -->
 
-            </div>
-            <!-- End of Content Wrapper -->
+          </div>
+          <!-- End of Content Wrapper -->
 
-        </div>
-        <!-- End of Page Wrapper -->
+      </div>
+      <!-- End of Page Wrapper -->
 
-        <!-- Scroll to Top Button-->
-        <a class="scroll-to-top rounded" href="#page-top">
-            <i class="fas fa-angle-up"></i>
-        </a>
+      <!-- Scroll to Top Button-->
+      <a class="scroll-to-top rounded" href="#page-top">
+          <i class="fas fa-angle-up"></i>
+      </a>
 
-        <!-- Logout Modal-->
-        <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">¿Quieres cerrar sesión?</h5>
-                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">Seleccione "Cerrar sesión" a continuación si está listo para finalizar su sesión actual.</div>
-                    <div class="modal-footer">
-                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                        <a class="btn btn-primary" href="{% url 'logout' %}">Cerrar Sesión</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+      <!-- Logout Modal-->
+      <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">¿Quieres cerrar sesión?</h5>
+                      <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">×</span>
+                      </button>
+                  </div>
+                  <div class="modal-body">Seleccione "Cerrar sesión" a continuación si está listo para finalizar su sesión actual.</div>
+                  <div class="modal-footer">
+                      <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                      <a class="btn btn-primary" href="{% url 'logout' %}">Cerrar Sesión</a>
+                  </div>
+              </div>
+          </div>
+       </div>
 
         <!-- Bootstrap core JavaScript-->
         <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
@@ -335,6 +292,5 @@
         <script src="{% static 'js/demo/chart-area-demo.js' %}"></script>
         <script src="{% static 'js/demo/chart-pie-demo.js' %}"></script>
 
-    </body>
-
-    </html>
+  </body>
+</html>

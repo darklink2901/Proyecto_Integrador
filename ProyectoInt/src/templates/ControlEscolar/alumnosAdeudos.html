@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>{{departamento}}</title>
+    <title>Todos los prestamos</title>
     <!-- Custom fonts for this template-->
     <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
     <link
@@ -16,6 +16,7 @@
 
     <!-- Custom styles for this template-->
     <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
+    <link rel="icon" type="image/png" href="{% static 'img/logo.png' %}" >
   </head>
 
     <body id="page-top">
@@ -65,8 +66,8 @@
                         <div class="bg-white py-2 collapse-inner rounded">
                             <h6 class="collapse-header">Ver opciones :</h6>
                             <!-- <a class="collapse-item" href="utilities-color.html">Registrar usuario</a>  -->
-                            <a class="collapse-item" href="{% url 'generarPrestamo' %}">Prestar material</a>
-                            <a class="collapse-item" href="{% url 'recibirMaterial' %}">Recibir Material</a>
+                            <a class="collapse-item" href="{% url 'liberacion' %}">Alumnos para liberarse</a>
+                            <a class="collapse-item" href="{% url 'financieros' %}">Alumnos con adeudos</a>
                         </div>
                     </div>
                 </li>
@@ -74,35 +75,10 @@
                 <!-- Divider -->
                 <hr class="sidebar-divider">
 
-                <!-- Heading -->
-                <div class="sidebar-heading">
-                    Addons
-                </div>
-
-                <!-- Nav Item - Pages Collapse Menu -->
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-                        aria-expanded="true" aria-controls="collapsePages">
-                        <i class="fas fa-fw fa-folder"></i>
-                        <span>Material</span>
-                    </a>
-                    <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner rounded">
-                            <h6 class="collapse-header">Opciones:</h6>
-                            <a class="collapse-item" href="{% url 'materialDisponible' %}">Disponible</a>
-                            <a class="collapse-item" href="{% url 'agregarMaterial' %}">Agregar material</a>
-                            <!-- <a class="collapse-item" href="register.html">Prestamos</a> -->
-                        </div>
-                    </div>
-                </li>
 
 
-                <!-- Nav Item - Tables -->
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'todosPrestamos' %}">
-                        <i class="fas fa-fw fa-table"></i>
-                        <span>Todos los prestamos</span></a>
-                </li>
+
+
 
                 <!-- Divider -->
                 <hr class="sidebar-divider d-none d-md-block">
@@ -124,26 +100,22 @@
 
                     <!-- Topbar -->
                     <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-
+                      <form
+                          class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" method="get">
+                          <div class="input-group">
+                              <input type="text" name ="bus" class="form-control bg-light border-0 small" placeholder="Buscar"
+                                  aria-label="Search" aria-describedby="basic-addon2">
+                              <div class="input-group-append">
+                                  <button class="btn btn-primary" type="button">
+                                      <i class="fas fa-search fa-sm"></i>
+                                  </button>
+                              </div>
+                          </div>
+                      </form>
                         <!-- Sidebar Toggle (Topbar) -->
                         <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                             <i class="fa fa-bars"></i>
                         </button>
-
-                        <!-- Topbar Search -->
-                        <form
-                            class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                            <div class="input-group">
-                                <input type="text" class="form-control bg-light border-0 small" placeholder="Buscar"
-                                    aria-label="Search" aria-describedby="basic-addon2">
-                                <div class="input-group-append">
-                                    <button class="btn btn-primary" type="button">
-                                        <i class="fas fa-search fa-sm"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-
                         <!-- Topbar Navbar -->
                         <ul class="navbar-nav ml-auto">
 
@@ -168,18 +140,7 @@
                                 <!-- Dropdown - User Information -->
                                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                     aria-labelledby="userDropdown">
-                                    <a class="dropdown-item" href="#">
-                                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Profile
-                                    </a>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Settings
-                                    </a>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Activity Log
-                                    </a>
+
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -205,51 +166,57 @@
                                 </div>
                                 {% endfor %}
                               {% endif %}
-                        <!-- Page Heading -->
-                          <h1 class="h3 mb-2 text-gray-800">Recibir material del {{departamento}}.</h1>
-                          <p class="mb-4">Devoler material del {{departamento}}.</p>
+                              <!-- Page Heading -->
+                              <h1 class="h3 mb-2 text-gray-800">Adeudos en todo el instituto.</h1>
+                              <p class="mb-4">Se muestran todos los adeudos en la institución.</p>
 
-                        <!-- Content Row -->
-                        <div class="row">
-                          <div class="container">
-                            <!-- Formulario de prestamos -->
-                            <form method="POST"> {% csrf_token %}
-                              <div class="form-group">
-                                <label for="exampleFormControlInput1">Numero de control</label>
-                                <input name="num" type="text" class="form-control" id="exampleFormControlInput1" placeholder="Numero de control de alumno">
+                                      <!-- data example -->
+                              <div class="card shadow mb-4">
+                                  <div class="card-header py-3">
+                                      <h6 class="m-0 font-weight-bold text-primary">Material</h6>
+                                  </div>
+                                  <div class="card-body">
+                                      <div class="table-responsive">
+                                          <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                              <thead>
+                                                  <tr>
+                                                      <th>Numero de control</th>
+                                                      <th>Carrera</th>
+                                                      <th>Nombre</th>
+                                                      <th>Area</th>
+                                                      <th>Material</th>
+                                                      <th>Cantidad</th>
+                                                      <th>Fecha del adeudo</th>
+                                                      <th>Ficha de pago</th>
+                                                  </tr>
+                                              </thead>
+                                              <!-- <tfoot>
+                                                  <tr>
+                                                    <th>Numero de control</th>
+                                                    <th>Nombres</th>
+                                                    <th>Apellidos</th>
+                                                    <th>Area</th>
+                                                    <th>Cantidad</th>
+                                                    <th>Fecha del adeudo</th>
+                                                  </tr>
+                                              </tfoot> -->
+                                              <tbody>
+                                                {% for adeudo in adeudos  %}
+                                                  <tr>
+                                                      <td>{{adeudo.numeroControl.numeroControl}}</td>
+                                                      <td>{{adeudo.numeroControl.carrera}}</td>
+                                                      <td>{{adeudo.numeroControl.nombre}} {{adeudo.numeroControl.apellidos}}</td>
+                                                      <td>{{adeudo.area.nombre}}</td>
+                                                      <td>{{adeudo.material.nombre}}</td>
+                                                      <td>{{adeudo.cantidad}}</td>
+                                                      <td>{{adeudo.fecha}}</td>
+                                                      <td><a href="{% url 'ficha_pago' adeudo.idAdeudo %}">Generar ficha de pago</a></td>
+                                                {% endfor %}
+                                              </tbody>
+                                          </table>
+                                      </div>
+                                  </div>
                               </div>
-                              <div class="form-group">
-                                <div class="form-group">
-                                  <label for="exampleFormControlInput1">Numero de adeudo</label>
-                                  <input name="numAd" type="text" class="form-control" id="exampleFormControlInput1" placeholder="Introduzca el numero del adeudo">
-                                </div>
-                                <div class="form-group">
-                                 <label for="exampleFormControlSelect2">Material</label>
-                                 <select name="mat" multiple class="form-control" id="exampleFormControlSelect2">
-                                   {% for material in materiales %}
-                                   <option value="{{material.idMaterial}}">{{material.nombre}}</option>
-                                   {% endfor %}
-                                 </select>
-                               </div>
-                                <div class="form-group">
-                                <label for="exampleFormControlSelect1">Cantidad devuelta</label>
-                                <select name="can" class="form-control" id="exampleFormControlSelect1">
-                                  <option value="1">1</option>
-                                  <option value="2">2</option>
-                                  <option value="3">3</option>
-                                  <option value="4">4</option>
-                                  <option value="5">5</option>
-                                  <option value="6">6</option>
-                                  <option value="7">7</option>
-                                  <option value="8">8</option>
-                                </select>
-                              </div>
-                              <!-- <div class="form-group">
-                                <label for="exampleFormControlTextarea1">Example textarea</label>
-                                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                              </div> -->
-                              <button type="submit" class="btn btn-primary">Realizar devolución</button>
-                          </form>
                           </div>
 
 

@@ -38,6 +38,7 @@ class Adeudo(models.Model):
     cantidad = models.IntegerField()
     fecha = models.DateTimeField(auto_now_add=True)
     cargo = models.BooleanField(default = None, verbose_name="Debe")
+    historial = models.IntegerField(default = None)
 
     def __str__(self):
         return "Adeudo numero: " + str(self.idAdeudo)

@@ -3,6 +3,9 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from .models import Adeudo,Material,Alumno,Laboratorio
 from django.contrib import messages
+from django.db.models import Q
+from django.http import HttpResponse
+from .utils import render_to_pdf
 # Create your views here.
 
 def inicio(request):
@@ -18,7 +21,7 @@ def inicio(request):
             'adeudosTotales': adeudosTotales,
             'materialDisponible':materialDisponible
         }
-        return render(request, "index.html",contexto)
+        return render(request, "ControlEscolar/index.html",contexto)
     return redirect('login')
 
 def generarPrestamo(request):
@@ -51,6 +54,7 @@ def generarPrestamo(request):
                 post.material = material
                 post.area = laboratorio
                 post.cantidad = request.POST.get('can')
+                post.historial = request.POST.get('can')
                 post.cargo = True
                 post.save()
                 material.cantidad = material.cantidad - valor
@@ -62,7 +66,7 @@ def generarPrestamo(request):
                 return redirect('generarPrestamo')
         if request.method == 'POST':
             messages.warning(request, '¡¡Por favor verifique todos los campos!!')
-        return render(request, "generarPrestamo.html",contexto)
+        return render(request, "ControlEscolar/generarPrestamo.html",contexto)
     return redirect('login')
 
 def agregarMaterial(request):
@@ -91,7 +95,7 @@ def agregarMaterial(request):
             return redirect('agregarMaterial')
         if request.method == 'POST':
             messages.warning(request, '¡¡Por favor verifique todos los campos!!')
-        return render(request, "agregarMaterial.html",contexto)
+        return render(request, "ControlEscolar/agregarMaterial.html",contexto)
     return redirect('login')
 
 def materialDisponible(request):
@@ -109,7 +113,7 @@ def materialDisponible(request):
             'materialDisponible':materialDisponible,
             'materiales':materiales
         }
-        return render(request, "materialDisponible.html",contexto)
+        return render(request, "ControlEscolar/materialDisponible.html",contexto)
     return redirect('login')
 
 def recibirMaterial(request):
@@ -134,6 +138,7 @@ def recibirMaterial(request):
             valor = int(request.POST.get('can'))
             if adeudo.cantidad == valor:
                 adeudo.cargo = False
+                adeudo.cantidad = 0
                 materialEsp.cantidad = materialEsp.cantidad + valor
                 adeudo.save()
                 materialEsp.save()
@@ -152,7 +157,7 @@ def recibirMaterial(request):
             return redirect('recibirMaterial')
         if request.method == 'POST':
             messages.warning(request, '¡¡Por favor verifique todos los campos!!')
-        return render(request, "recibirMaterial.html",contexto)
+        return render(request, "ControlEscolar/recibirMaterial.html",contexto)
     return redirect('login')
 
 def todosPrestamos(request):
@@ -164,6 +169,18 @@ def todosPrestamos(request):
         adeudos = Adeudo.objects.filter(area = laboratorio ).filter(cargo = True)
         materialDisponible = Material.objects.filter(area = laboratorio).count
         materiales = Material.objects.filter(area = laboratorio)
+        queryset = request.GET.get("bus")
+        if queryset:
+            adeudos =Adeudo.objects.filter(
+             Q(idAdeudo__icontains = queryset)|
+             Q(numeroControl__numeroControl__icontains = queryset)
+            ).filter(area = laboratorio).filter(cargo = True).distinct()
+            contexto = {
+                'departamento': departamento,
+                'usuario': usuario,
+                'adeudos': adeudos,
+            }
+            return render(request, "ControlEscolar/todosPrestamos.html",contexto)
         contexto = {
             'departamento': departamento,
             'usuario': usuario,
@@ -172,5 +189,57 @@ def todosPrestamos(request):
             'materiales':materiales,
             'adeudos':adeudos
         }
-        return render(request, "todosPrestamos.html",contexto)
+        return render(request, "ControlEscolar/todosPrestamos.html",contexto)
     return redirect('login')
+
+def financieros(request):
+    if request.user.is_authenticated:
+        usuario = User.objects.get(username = request.session["usr"] )
+        adeudos = Adeudo.objects.filter(cargo = True)
+        departamento = usuario.perfil.departamento
+        laboratorio = Laboratorio.objects.get(nombre = departamento)
+        queryset = request.GET.get("bus")
+        if queryset:
+            adeudos =Adeudo.objects.filter(
+             Q(idAdeudo__icontains = queryset)|
+             Q(numeroControl__numeroControl__icontains = queryset)
+            ).filter(cargo = True).distinct()
+            contexto = {
+                'departamento': departamento,
+                'usuario': usuario,
+                'adeudos': adeudos,
+            }
+            return render(request, "ControlEscolar/alumnosAdeudos.html",contexto)
+        contexto = {
+        'usuario': usuario,
+        'adeudos':adeudos,
+        'laboratorio': laboratorio,
+        'departamento': departamento
+        }
+    return render(request, "ControlEscolar/alumnosAdeudos.html",contexto)
+
+def liberar_alumno(request,num):
+    alum = Alumno.objects.get(numeroControl = num)
+    pdf = render_to_pdf('ControlEscolar/lista2.html', {'alum':alum})
+    return HttpResponse(pdf, content_type='application/pdf')
+
+def ficha_pago(request,id):
+    adeudos = Adeudo.objects.get(idAdeudo = id)
+    num = adeudos.numeroControl.numeroControl
+    alum = Alumno.objects.get(numeroControl = num)
+    costo = adeudos.material.precio * adeudos.cantidad
+    contexto = {
+        'alum': alum,
+        'adeudos': adeudos,
+        'costo':costo
+    }
+    pdf = render_to_pdf('ControlEscolar/lista.html', contexto)
+    return HttpResponse(pdf, content_type='application/pdf')
+
+def liberacion(request):
+    if request.user.is_authenticated:
+        adeudos = Adeudo.objects.filter(cargo = False)
+        contexto = {
+            'adeudos': adeudos
+        }
+    return render(request, "ControlEscolar/liberarAlumnos.html",contexto)

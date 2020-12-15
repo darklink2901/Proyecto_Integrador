@@ -1,0 +1,20 @@
+{% load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ficha de pago</title>
+</head>
+<body>
+    <h2 style=" font-size:20px;text-align:center; font-family: font-family: 'Titillium Web', sans-serif;">Ficha de pago.</h1>
+      <br>
+      <p style="font-size:20px; font-family: font-family: 'Titillium Web', sans-serif;">Se otorga la ficha de pago para que el alumno/a <strong>{{alum.nombre}} {{alum.apellidos}}</strong> de la carrera {{alum.carrera}} con numero de control {{alum.numeroControl}} pague ${{costo}}: </p>
+      <strong><p style="font-size:20px; font-family: font-family: 'Titillium Web', sans-serif;">Adeudos:</p></strong>
+      <br>
+      <p style="font-size:20px; font-family: font-family: 'Titillium Web', sans-serif;"> </p>
+      <br>
+      <p style="font-size:20px; font-family: font-family: 'Titillium Web', sans-serif;">{{adeudos.material.nombre}} ({{adeudos.cantidad}})</p>
+
+</body>
+</html>

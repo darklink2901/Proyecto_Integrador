@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>{{departamento}}</title>
+    <title>Agregar Material</title>
     <!-- Custom fonts for this template-->
     <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
     <link
@@ -16,6 +16,7 @@
 
     <!-- Custom styles for this template-->
     <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
+    <link rel="icon" type="image/png" href="{% static 'img/logo.png' %}" >
   </head>
 
     <body id="page-top">
@@ -130,20 +131,6 @@
                             <i class="fa fa-bars"></i>
                         </button>
 
-                        <!-- Topbar Search -->
-                        <form
-                            class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                            <div class="input-group">
-                                <input type="text" class="form-control bg-light border-0 small" placeholder="Buscar"
-                                    aria-label="Search" aria-describedby="basic-addon2">
-                                <div class="input-group-append">
-                                    <button class="btn btn-primary" type="button">
-                                        <i class="fas fa-search fa-sm"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-
                         <!-- Topbar Navbar -->
                         <ul class="navbar-nav ml-auto">
 
@@ -168,18 +155,7 @@
                                 <!-- Dropdown - User Information -->
                                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                     aria-labelledby="userDropdown">
-                                    <a class="dropdown-item" href="#">
-                                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Profile
-                                    </a>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Settings
-                                    </a>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Activity Log
-                                    </a>
+                                    
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                         <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -207,7 +183,7 @@
                               {% endif %}
                         <!-- Page Heading -->
                         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                            <h1 class="h3 mb-0 text-gray-800">Prestar material</h1>
+                            <h1 class="h3 mb-0 text-gray-800">Agregar material</h1>
                         </div>
 
                         <!-- Content Row -->
@@ -216,35 +192,22 @@
                             <!-- Formulario de prestamos -->
                             <form method="POST"> {% csrf_token %}
                               <div class="form-group">
-                                <label for="exampleFormControlInput1">Numero de control</label>
-                                <input name="num" type="text" class="form-control" id="exampleFormControlInput1" placeholder="Numero de control de alumno">
+                                <label for="exampleFormControlInput1">Nombre de material</label>
+                                <input name="nom" type="text" class="form-control" id="exampleFormControlInput1" placeholder="Ingresa el nombre del material">
                               </div>
                               <div class="form-group">
-                                 <label for="exampleFormControlSelect2">Material</label>
-                                 <select name="mat" multiple class="form-control" id="exampleFormControlSelect2">
-                                   {% for material in materiales %}
-                                   <option value="{{material.idMaterial}}">{{material.nombre}}</option>
-                                   {% endfor %}
-                                 </select>
-                               </div>
-                                <div class="form-group">
-                                <label for="exampleFormControlSelect1">Cantidad</label>
-                                <select name="can" class="form-control" id="exampleFormControlSelect1">
-                                  <option>1</option>
-                                  <option>2</option>
-                                  <option>3</option>
-                                  <option>4</option>
-                                  <option>5</option>
-                                  <option>6</option>
-                                  <option>7</option>
-                                  <option>8</option>
-                                </select>
+                                <label for="exampleFormControlInput1">Precio de material</label>
+                                <input name="pre" type="number" class="form-control" id="exampleFormControlInput1" placeholder="Ingrese el costo del material">
+                              </div>
+                              <div class="form-group">
+                                <label for="exampleFormControlInput1">Cantidad</label>
+                                <input name="can" type="number" class="form-control" id="exampleFormControlInput1" placeholder="Ingrese la cantidad del material">
                               </div>
                               <!-- <div class="form-group">
                                 <label for="exampleFormControlTextarea1">Example textarea</label>
                                 <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
                               </div> -->
-                              <button type="submit" class="btn btn-primary">Realizar prestamo</button>
+                              <button type="submit" class="btn btn-primary">Agregar material</button>
                           </form>
                           </div>
 

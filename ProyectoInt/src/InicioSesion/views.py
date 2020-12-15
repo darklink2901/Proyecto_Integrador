@@ -28,7 +28,7 @@ def login(request):
             messages.warning(request, '¡¡Por favor verifique las credenciales!!')
     if request.method == 'POST':
         messages.warning(request, '¡¡Por favor complete los campos!!')
-    return render(request, "login.html")
+    return render(request, "InicioSesion/login.html")
 
 def logout(request):
     do_logout(request)
@@ -42,11 +42,11 @@ def registro(request):
     form.fields['password2'].help_text = None
     if request.method == "POST":
         form = CustomUserForm(request.POST)
-        post = Perfil(request.POST)
-        if form.is_valid() and request.POST.get('dep') and request.POST.get('ima'):
+        post = Perfil(request.FILES)
+        if form.is_valid() and request.POST.get('dep') and request.FILES.get('ima'):
             form.save()
             post.departamento = request.POST.get('dep')
-            post.imagen = request.POST.get('ima')
+            post.imagen = request.FILES.get('ima')
             username = form.cleaned_data["username"]
             password = form.cleaned_data["password1"]
             user = authenticate(username = username, password = password)
@@ -58,4 +58,4 @@ def registro(request):
             do_login(request,user)
             return redirect('inicio')
 
-    return render(request, "registro.html", {'form': form})
+    return render(request, "InicioSesion/registro.html", {'form': form})

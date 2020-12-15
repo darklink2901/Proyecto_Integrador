@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from InicioSesion.views import login,logout,registro
-from ControlEscolar.views import inicio,generarPrestamo,agregarMaterial,materialDisponible,todosPrestamos,recibirMaterial
+from ControlEscolar.views import inicio,generarPrestamo,agregarMaterial,materialDisponible,todosPrestamos,recibirMaterial,financieros,ficha_pago,liberar_alumno,liberacion
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -31,6 +31,10 @@ urlpatterns = [
     path('materialDisponible/',materialDisponible, name='materialDisponible'),
     path('recibirMaterial/',recibirMaterial, name='recibirMaterial'),
     path('todosPrestamos/',todosPrestamos, name='todosPrestamos'),
+    path('financieros/',financieros, name='financieros'),
+    path('ficha_pago/<int:id>',ficha_pago, name='ficha_pago'),
+    path('liberacion/',liberacion, name='liberacion'),
+    path('liberar_alumno/<int:num>',liberar_alumno, name='liberar_alumno'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
