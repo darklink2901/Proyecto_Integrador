@@ -35,6 +35,8 @@ def logout(request):
     return redirect('login')
 
 def registro(request):
+    if request.user.is_authenticated:
+        return redirect('inicio')
     form = CustomUserForm()
     post = Perfil()
     form.fields['username'].help_text = None
